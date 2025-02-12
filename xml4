@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+
+    <!-- Шаблон для корневого элемента -->
+    <xsl:template match="/">
+        <items>
+            <!-- Обрабатываем первый уровень комментариев -->
+            <xsl:apply-templates select="ul/li"/>
+        </items>
+    </xsl:template>
+
+    <!-- Шаблон для обработки каждого комментария -->
+    <xsl:template match="li">
+        <!-- Создаем элемент item -->
+        <item id="{@data-id}" parentid="{$parentId}" author="{b}">
+            <xsl:value-of select="span"/>
+        </item>
+
+        <!-- Обрабатываем вложенные комментарии, передавая текущий data-id как parentId -->
+        <xsl:apply-templates select="ul/li">
+            <xsl:with-param name="parentId" select="@data-id"/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+    <!-- Шаблон для обработки вложенных комментариев -->
+    <xsl:template match="li">
+        <xsl:param name="parentId" select="0"/>
+        <!-- Создаем элемент item -->
+        <item id="{@data-id}" parentid="{$parentId}" author="{b}">
+            <xsl:value-of select="span"/>
+        </item>
+
+        <!-- Обрабатываем вложенные комментарии, передавая текущий data-id как parentId -->
+        <xsl:apply-templates select="ul/li">
+            <xsl:with-param name="parentId" select="@data-id"/>
+        </xsl:apply-templates>
+    </xsl:template>
+</xsl:stylesheet>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+    <item id="1" parentid="0" author="Вася Пупкин">Привет всем!</item>
+    <item id="2" parentid="1" author="Федя Сумкин">Ну, привет</item>
+    <item id="3" parentid="2" author="Вова Морковкин">Не ну, а Привет!</item>
+    <item id="4" parentid="2" author="Петя Зайцев">Чё так не весело?</item>
+    <item id="5" parentid="4" author="Зина Корзинкина">Может у него настроение плохое</item>
+    <item id="6" parentid="5" author="Петя Зайцев">Я просто спросил</item>
+    <item id="7" parentid="1" author="Вова Морковкин">И тебе привет! Как дела?</item>
+    <item id="8" parentid="7" author="Вася Пупкин">Ничё так.</item>
+</items>
