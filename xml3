@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<courses>
+    <course>
+        <title>XML технологии</title>
+        <lecturer>Борисов И.О.</lecturer>
+        <topics>
+            <topic>XML</topic>
+            <topic>XSLT</topic>
+        </topics>
+    </course>
+    <course>
+        <title>Веб-разработка</title>
+        <lecturer>Борисов И.О.</lecturer>
+        <topics>
+            <topic>HTML</topic>
+            <topic>CSS</topic>
+        </topics>
+    </course>
+    <course>
+        <title>Программирование на PHP</title>
+        <lecturer>Иванов А.А.</lecturer>
+        <topics>
+            <topic>PHP</topic>
+            <topic>XML</topic>
+        </topics>
+    </course>
+</courses>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:output method="html" indent="yes"/>
+
+    <!-- Ключ для поиска курсов по преподавателю -->
+    <xsl:key name="coursesByLecturer" match="course" use="lecturer"/>
+
+    <!-- Ключ для поиска курсов по теме -->
+    <xsl:key name="coursesByTopic" match="course" use="topics/topic"/>
+
+    <!-- Шаблон для корневого элемента -->
+    <xsl:template match="/">
+        <html>
+            <body>
+                <h1>Наши курсы</h1>
+
+                <!-- Курсы, которые читает Борисов И.О. -->
+                <h3>Курсы, которые читает Борисов И.О.</h3>
+                <ul>
+                    <xsl:for-each select="key('coursesByLecturer', 'Борисов И.О.')">
+                        <li><xsl:value-of select="title"/></li>
+                    </xsl:for-each>
+                </ul>
+
+                <!-- Курсы, которые используют XML -->
+                <h3>Курсы, которые используют XML</h3>
+                <ul>
+                    <xsl:for-each select="key('coursesByTopic', 'XML')">
+                        <li><xsl:value-of select="title"/></li>
+                    </xsl:for-each>
+                </ul>
+
+                <!-- Курсы, которые читает Борисов И.О., и в которых есть тема XSLT -->
+                <h3>Курсы, которые читает Борисов И.О., и в которых есть тема XSLT</h3>
+                <ul>
+                    <xsl:for-each select="key('coursesByLecturer', 'Борисов И.О.')">
+                        <xsl:if test="topics/topic = 'XSLT'">
+                            <li><xsl:value-of select="title"/></li>
+                        </xsl:if>
+                    </xsl:for-each>
+                </ul>
+            </body>
+        </html>
+    </xsl:template>
+</xsl:stylesheet>
+
+<html>
+   <body>
+      <h1>Наши курсы</h1>
+      <h3>Курсы, которые читает Борисов И.О.</h3>
+      <ul>
+         <li>XML технологии</li>
+         <li>Веб-разработка</li>
+      </ul>
+      <h3>Курсы, которые используют XML</h3>
+      <ul>
+         <li>XML технологии</li>
+         <li>Программирование на PHP</li>
+      </ul>
+      <h3>Курсы, которые читает Борисов И.О., и в которых есть тема XSLT</h3>
+      <ul>
+         <li>XML технологии</li>
+      </ul>
+   </body>
+</html>
