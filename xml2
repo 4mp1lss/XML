@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Определение корневого элемента notebook -->
+  <xs:element name="notebook">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="offices">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="office" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="code" type="xs:ID" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="person" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="first" type="xs:string"/>
+                    <xs:element name="surname" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="address">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element name="city" type="xs:string"/>
+                    <xs:element name="street" type="xs:string"/>
+                    <xs:element name="index">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:pattern value="\d{6}"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                  </xs:all>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="phones">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="phone" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="type">
+                              <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                  <xs:enumeration value="work"/>
+                                  <xs:enumeration value="home"/>
+                                </xs:restriction>
+                              </xs:simpleType>
+                            </xs:attribute>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" use="required"/>
+            <xs:attribute name="office" type="xs:IDREF" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<notebook xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="notebook.xsd">
+
+  <offices>
+    <office code="O1">Main Office</office>
+    <office code="O2">Branch Office</office>
+  </offices>
+
+  <person id="P1" office="O1">
+    <name>
+      <first>John</first>
+      <surname>Doe</surname>
+    </name>
+    <address>
+      <city>New York</city>
+      <street>5th Avenue</street>
+      <index>100001</index>
+    </address>
+    <phones>
+      <phone type="work">123-45-67</phone>
+      <phone type="home">987-65-43</phone>
+    </phones>
+  </person>
+
+  <person id="P2" office="O2">
+    <name>
+      <first>Jane</first>
+      <surname>Smith</surname>
+    </name>
+    <address>
+      <city>Los Angeles</city>
+      <street>Sunset Blvd</street>
+      <index>900001</index>
+    </address>
+    <phones>
+      <phone>555-44-33</phone>
+    </phones>
+  </person>
+
+</notebook>
